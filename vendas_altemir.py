@@ -3,18 +3,34 @@ import os
 from datetime import datetime
 from collections import defaultdict
 
-def obter_arquivo_vendas(mes=None):
+def obter_arquivo_vendas(mes=None):   
     if mes is None:
         mes = datetime.now().strftime("%Y-%m")
     return f"vendas_{mes}.json"
 
 def carregar_vendas(nome_arquivo):
+    # >>>>> COMEÇA A PARTE NOVA AQUI <<<<<
+    print(f"🕵️ Tentando carregar o arquivo: {nome_arquivo}") # DEBUG
     if os.path.exists(nome_arquivo):
+        print("✅ Arquivo encontrado!") # DEBUG
         try:
             with open(nome_arquivo, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except (json.JSONDecodeError, FileNotFoundError):
+                # É importante verificar se o arquivo não está vazio antes de carregar
+                if os.path.getsize(nome_arquivo) > 0:
+                    return json.load(f)
+                else:
+                    print("❌ ERRO: O arquivo foi encontrado, mas está vazio.") # DEBUG
+                    return []
+        except json.JSONDecodeError:
+            print("❌ ERRO: O arquivo foi encontrado, mas o conteúdo JSON é inválido.") # DEBUG
             return []
+        except FileNotFoundError: # Redundante, mas bom ter
+            print("❌ ERRO: Arquivo não encontrado (verificação secundária).") # DEBUG
+            return []
+    else:
+        print("❌ Arquivo NÃO encontrado neste local.") # DEBUG
+        # A linha abaixo é super útil para saber de onde o script está rodando
+        print(f"   O script está rodando no diretório: {os.getcwd()}") # DEBUG
     return []
 
 def salvar_vendas(vendas, nome_arquivo):
