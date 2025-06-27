@@ -9,28 +9,25 @@ def obter_arquivo_vendas(mes=None):
     return f"vendas_{mes}.json"
 
 def carregar_vendas(nome_arquivo):
-    # >>>>> COMEÇA A PARTE NOVA AQUI <<<<<
-    print(f"🕵️ Tentando carregar o arquivo: {nome_arquivo}") # DEBUG
+    print(f"🕵️ Tentando carregar o arquivo: {nome_arquivo}") 
     if os.path.exists(nome_arquivo):
-        print("✅ Arquivo encontrado!") # DEBUG
+        print("✅ Arquivo encontrado!") 
         try:
             with open(nome_arquivo, "r", encoding="utf-8") as f:
-                # É importante verificar se o arquivo não está vazio antes de carregar
                 if os.path.getsize(nome_arquivo) > 0:
                     return json.load(f)
                 else:
-                    print("❌ ERRO: O arquivo foi encontrado, mas está vazio.") # DEBUG
+                    print("❌ ERRO: O arquivo foi encontrado, mas está vazio.") 
                     return []
         except json.JSONDecodeError:
-            print("❌ ERRO: O arquivo foi encontrado, mas o conteúdo JSON é inválido.") # DEBUG
+            print("❌ ERRO: O arquivo foi encontrado, mas o conteúdo JSON é inválido.") 
             return []
-        except FileNotFoundError: # Redundante, mas bom ter
-            print("❌ ERRO: Arquivo não encontrado (verificação secundária).") # DEBUG
+        except FileNotFoundError: 
+            print("❌ ERRO: Arquivo não encontrado (verificação secundária).") 
             return []
     else:
-        print("❌ Arquivo NÃO encontrado neste local.") # DEBUG
-        # A linha abaixo é super útil para saber de onde o script está rodando
-        print(f"   O script está rodando no diretório: {os.getcwd()}") # DEBUG
+        print("❌ Arquivo NÃO encontrado neste local.") 
+        print(f"   O script está rodando no diretório: {os.getcwd()}")
     return []
 
 def salvar_vendas(vendas, nome_arquivo):
